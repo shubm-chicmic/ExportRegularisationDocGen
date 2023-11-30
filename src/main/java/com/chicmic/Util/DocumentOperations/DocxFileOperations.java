@@ -1,9 +1,9 @@
 package com.chicmic.Util.DocumentOperations;
 
 
-import com.chicmic.ExcelReadAndDataTransfer.ExcelPerformOperations;
-import com.chicmic.engine.MainRunner;
-import com.spire.doc.FileFormat;
+
+import com.chicmic.MainRunner;
+//import com.spire.doc.FileFormat;
 import org.apache.commons.math3.util.Pair;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
@@ -32,15 +32,15 @@ public class DocxFileOperations {
         }
         return null;
     }
-    public String convertDocToDocx(String docFilePath) {
-        com.spire.doc.Document document = new com.spire.doc.Document();
-        //Load a Doc file
-        document.loadFromFile(docFilePath);
-        String destinationFilePath = docFilePath +"temp.docx";
-        //Convert the Doc file to Docx
-        document.saveToFile(destinationFilePath, FileFormat.Docx);
-        return destinationFilePath;
-    }
+//    public String convertDocToDocx(String docFilePath) {
+//        com.spire.doc.Document document = new com.spire.doc.Document();
+//        //Load a Doc file
+//        document.loadFromFile(docFilePath);
+//        String destinationFilePath = docFilePath +"temp.docx";
+//        //Convert the Doc file to Docx
+//        document.saveToFile(destinationFilePath, FileFormat.Docx);
+//        return destinationFilePath;
+//    }
     public void getParagraphAndRunIndices(String inputFilePath) throws IOException {
 
         FileInputStream fileInputStream = new FileInputStream(inputFilePath);
@@ -75,67 +75,67 @@ public class DocxFileOperations {
             paragraphIndex++;
         }
     }
-    public XWPFDocument insertTableInParagraph(XWPFDocument document, int paragraphIndex) throws IOException, InvalidFormatException {
-        List<XWPFParagraph> paragraphs = document.getParagraphs();
-        XWPFParagraph targetParagraph = paragraphs.get(paragraphIndex);
-
-        FileInputStream fis = new FileInputStream(MainRunner.rootDirectory + "/" + MainRunner.FILE_NAME);
-        Workbook workbook = new XSSFWorkbook(fis);
-        Sheet sheet = workbook.getSheetAt(0);
-        int rows = sheet.getPhysicalNumberOfRows();
-        int columns = 9;
-        // Create a new table with gray-colored headings
-        XWPFTable table = document.createTable(rows, columns);
-        CTTbl ttbl = table.getCTTbl();
-        CTTblPr tblPr = ttbl.getTblPr();
-        CTTblBorders borders = tblPr.isSetTblBorders() ? tblPr.getTblBorders() : tblPr.addNewTblBorders();
-        CTBorder border = borders.addNewBottom();
-        border.setColor("auto");
-        border.setSz(BigInteger.valueOf(4));
-
-        for (int row = 0; row < rows; row++) {
-            if (sheet.getRow(row) == null) {
-                continue;
-            }
-            for (int col = 0; col < columns; col++) {
-                XWPFTableCell cell = table.getRow(row + 1).getCell(col);
-                XWPFParagraph cellParagraph = cell.getParagraphs().get(0);
-                XWPFRun cellRun = cellParagraph.createRun();
-                cellRun.setFontFamily("Arial");
-                cellRun.setFontSize(7);
-
-                if (row == 0) {
-                    cellRun.setBold(true);
-                    cell.setColor("000000"); // Black color
-                    cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
-                    CTTcPr cellPr = cell.getCTTc().isSetTcPr() ? cell.getCTTc().getTcPr() : cell.getCTTc().addNewTcPr();
-                    CTShd shd = cellPr.isSetShd() ? cellPr.getShd() : cellPr.addNewShd();
-                    shd.setFill("BFBFBF"); // Grey color
-//                    cellRun.setColor("808080"); // Gray color (use other color codes)
+//    public XWPFDocument insertTableInParagraph(XWPFDocument document, int paragraphIndex) throws IOException, InvalidFormatException {
+//        List<XWPFParagraph> paragraphs = document.getParagraphs();
+//        XWPFParagraph targetParagraph = paragraphs.get(paragraphIndex);
+//
+//        FileInputStream fis = new FileInputStream(MainRunner.rootDirectory + "/" + MainRunner.FILE_NAME);
+//        Workbook workbook = new XSSFWorkbook(fis);
+//        Sheet sheet = workbook.getSheetAt(0);
+//        int rows = sheet.getPhysicalNumberOfRows();
+//        int columns = 9;
+//        // Create a new table with gray-colored headings
+//        XWPFTable table = document.createTable(rows, columns);
+//        CTTbl ttbl = table.getCTTbl();
+//        CTTblPr tblPr = ttbl.getTblPr();
+//        CTTblBorders borders = tblPr.isSetTblBorders() ? tblPr.getTblBorders() : tblPr.addNewTblBorders();
+//        CTBorder border = borders.addNewBottom();
+//        border.setColor("auto");
+//        border.setSz(BigInteger.valueOf(4));
+//
+//        for (int row = 0; row < rows; row++) {
+//            if (sheet.getRow(row) == null) {
+//                continue;
+//            }
+//            for (int col = 0; col < columns; col++) {
+//                XWPFTableCell cell = table.getRow(row + 1).getCell(col);
+//                XWPFParagraph cellParagraph = cell.getParagraphs().get(0);
+//                XWPFRun cellRun = cellParagraph.createRun();
+//                cellRun.setFontFamily("Arial");
+//                cellRun.setFontSize(7);
+//
+//                if (row == 0) {
 //                    cellRun.setBold(true);
-                }
-
-                cellParagraph.setSpacingAfter(0);
-                cellParagraph.setSpacingBefore(0);
-
-                String cellValue = sheet.getRow(row).getCell(col).toString();
-                if (row > 0 && col >= 6) {
-                    double cellDoubleValue = Double.parseDouble(cellValue);
-                    cellDoubleValue = Math.round(cellDoubleValue * 100.0) / 100.0;
-                    cellValue = String.valueOf(cellDoubleValue);
-                }
-                if (row > 0 && col == 0) cellValue = String.valueOf(row);
-                cellRun.setText(cellValue);
-
-            }
-        }
-
-        targetParagraph.getBody().insertNewTbl(targetParagraph.getCTP().newCursor()).getCTTbl().set(ttbl);
-
-        fis.close();
-
-        return document;
-    }
+//                    cell.setColor("000000"); // Black color
+//                    cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+//                    CTTcPr cellPr = cell.getCTTc().isSetTcPr() ? cell.getCTTc().getTcPr() : cell.getCTTc().addNewTcPr();
+//                    CTShd shd = cellPr.isSetShd() ? cellPr.getShd() : cellPr.addNewShd();
+//                    shd.setFill("BFBFBF"); // Grey color
+////                    cellRun.setColor("808080"); // Gray color (use other color codes)
+////                    cellRun.setBold(true);
+//                }
+//
+//                cellParagraph.setSpacingAfter(0);
+//                cellParagraph.setSpacingBefore(0);
+//
+//                String cellValue = sheet.getRow(row).getCell(col).toString();
+//                if (row > 0 && col >= 6) {
+//                    double cellDoubleValue = Double.parseDouble(cellValue);
+//                    cellDoubleValue = Math.round(cellDoubleValue * 100.0) / 100.0;
+//                    cellValue = String.valueOf(cellDoubleValue);
+//                }
+//                if (row > 0 && col == 0) cellValue = String.valueOf(row);
+//                cellRun.setText(cellValue);
+//
+//            }
+//        }
+//
+//        targetParagraph.getBody().insertNewTbl(targetParagraph.getCTP().newCursor()).getCTTbl().set(ttbl);
+//
+//        fis.close();
+//
+//        return document;
+//    }
 
     public void updateTextAtPosition(String inputFilePath, String outputFilePath, HashMap<Pair<Integer, Integer>, Pair<String, String>> textParaRunIndexMap) throws IOException {
         FileInputStream fileInputStream = new FileInputStream(inputFilePath);
@@ -153,22 +153,16 @@ public class DocxFileOperations {
                 if (runIndex >= 0 && runIndex < paragraph.getRuns().size()) {
                     XWPFRun run = paragraph.getRuns().get(runIndex);
                     run.setText(newText, 0);
-                    if ((getCallingClass(1) == ExcelPerformOperations.class) && (paragraphIndex == 1 && runIndex == 2) || (paragraphIndex == 31 && runIndex == 1)) {
-                        clearRunsInRange(document, paragraphIndex, runIndex + 1);
-                    }
-//                    else if((getCallingClass(1) == FourPointDeclaration.class) && (paragraphIndex == 3 && runIndex == 3)){
-//                        clearRunsInRange(document, paragraphIndex, 4, 5);
-//                    }
 
                 }
             } else if (docType.startsWith("table")) {
                 if (docType.equals("table_add")) {
                     System.out.println("Table cell update");
-                    try {
-                        document = insertTableInParagraph(document, paragraphIndex);
-                    } catch (InvalidFormatException e) {
-                        throw new RuntimeException(e);
-                    }
+//                    try {
+////                        document = insertTableInParagraph(document, paragraphIndex);
+//                    } catch (InvalidFormatException e) {
+//                        throw new RuntimeException(e);
+//                    }
                 } else {
                     int tableIndex;
                     try {

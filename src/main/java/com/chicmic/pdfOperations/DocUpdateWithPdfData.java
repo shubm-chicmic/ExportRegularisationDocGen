@@ -1,9 +1,9 @@
 package com.chicmic.pdfOperations;
 
+import com.chicmic.MainRunner;
 import com.chicmic.Util.DateOperations;
 import com.chicmic.Util.DocumentOperations.DocxFileOperations;
 import com.chicmic.Util.FolderOperations.FolderOperations;
-import com.chicmic.engine.MainRunner;
 import org.apache.commons.math3.util.Pair;
 
 import java.io.IOException;
@@ -16,12 +16,12 @@ public class DocUpdateWithPdfData {
     private final FolderOperations folderOperations = new FolderOperations();
     private boolean isDoc = false;
     private final String currentDate = DateOperations.getTodaysDate();
-    private String billAmount = "";
-    private String softexNumber = "";
-    private String FIRCNumber = "";
-    private String accountNumber = "";
-    private String importerExporterCode = "";
-    private String invoiceNumber = "";
+    private final String billAmount = "";
+    private final String softexNumber = "";
+    private final String FIRCNumber = "";
+    private final String accountNumber = "";
+    private final String importerExporterCode = "";
+    private final String invoiceNumber = "";
 
     public void documentUpdate() {
         try {
