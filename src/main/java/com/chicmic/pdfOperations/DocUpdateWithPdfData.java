@@ -26,7 +26,7 @@ public class DocUpdateWithPdfData {
     public void documentUpdate() {
         try {
             if (documentName.endsWith(".doc")) {
-                documentName = docxFileOperations.convertDocToDocx(documentName);
+//                documentName = docxFileOperations.convertDocToDocx(documentName);
                 isDoc = true;
             }
             docxFileOperations.getParagraphAndRunIndices(documentName);
