@@ -13,65 +13,69 @@ import java.util.List;
 
 public class PdfReadAndDocUpdate {
     public static void main(String[] args) {
-        DocUpdateWithPdfData docUpdateWithPdfData = new DocUpdateWithPdfData();
-//        docUpdateWithPdfData.documentUpdate();
-        readPDF("sample1.pdf");
-        float startX =  220.87439f; // Start X position of the word
-        float startY =  62.411133f; // Start Y position of the word
-        float endX = 269.28534f; // End X position of the word
-        float endY = 729.58887f; // End Y position of the word
-
-
-        List<String> desiredWord = getWordsInPositionRange("sample1.pdf", startX, startY, endX, endY);
-
-        if (!desiredWord.isEmpty()) {
-            System.out.println("Word retrieved: " + desiredWord.get(0));
-        } else {
-            System.out.println("No word found in the specified position range.");
-        }
-    }
-    public static List<String> getWordsInPositionRange(String filePath, float startX, float startY, float endX, float endY) {
-        List<String> wordsInRange = new ArrayList<>();
-
-        try (PDDocument document = PDDocument.load(new File(filePath))) {
-            PDFTextStripper stripper = new PDFTextStripper() {
-                @Override
-                protected void writeString(String text, List<TextPosition> textPositions) throws IOException {
-                    super.writeString(text, textPositions);
-
-                    StringBuilder word = new StringBuilder();
-                    float currentX = 0f;
-                    float currentY = 0f;
-
-                    for (TextPosition textPosition : textPositions) {
-                        currentX = textPosition.getX();
-                        currentY = textPosition.getY();
-
-                        // Check if the current position falls within the specified range
-                        if (currentX >= startX && currentX <= endX && currentY >= startY && currentY <= endY) {
-                            String currentWord = textPosition.getUnicode();
-                            word.append(currentWord);
-                        } else {
-                            // If the current word ends, add it to the list
-                            if (word.length() > 0) {
-                                wordsInRange.add(word.toString());
-                                word.setLength(0); // Clear the word buffer for the next word
-                            }
-                        }
-                    }
-                }
-            };
-
-            // Set configurations for text extraction (optional)
-            stripper.setSortByPosition(true); // Process text based on its position
-
-            // Extract text from the PDF
-            stripper.getText(document);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return wordsInRange;
+        String filePath = "1 - 30 sep.pdf";
+        PdfTableExtractor.extractTable();
+        PdfTableExtractor.getCellValueFromTable(filePath, 1,2, 1);
+        PdfTableExtractor.printWordsWithIndices(filePath);
+//        DocUpdateWithPdfData docUpdateWithPdfData = new DocUpdateWithPdfData();
+////        docUpdateWithPdfData.documentUpdate();
+////        readPDF("sample1.pdf");
+//        float startX =  220.87439f; // Start X position of the word
+//        float startY =  62.411133f; // Start Y position of the word
+//        float endX = 269.28534f; // End X position of the word
+//        float endY = 729.58887f; // End Y position of the word
+//
+//
+//        List<String> desiredWord = getWordsInPositionRange("sample1.pdf", startX, startY, endX, endY);
+//
+//        if (!desiredWord.isEmpty()) {
+//            System.out.println("Word retrieved: " + desiredWord.get(0));
+//        } else {
+//            System.out.println("No word found in the specified position range.");
+//        }
+//    }
+//    public static List<String> getWordsInPositionRange(String filePath, float startX, float startY, float endX, float endY) {
+//        List<String> wordsInRange = new ArrayList<>();
+//
+//        try (PDDocument document = PDDocument.load(new File(filePath))) {
+//            PDFTextStripper stripper = new PDFTextStripper() {
+//                @Override
+//                protected void writeString(String text, List<TextPosition> textPositions) throws IOException {
+//                    super.writeString(text, textPositions);
+//
+//                    StringBuilder word = new StringBuilder();
+//                    float currentX = 0f;
+//                    float currentY = 0f;
+//
+//                    for (TextPosition textPosition : textPositions) {
+//                        currentX = textPosition.getX();
+//                        currentY = textPosition.getY();
+//
+//                        // Check if the current position falls within the specified range
+//                        if (currentX >= startX && currentX <= endX && currentY >= startY && currentY <= endY) {
+//                            String currentWord = textPosition.getUnicode();
+//                            word.append(currentWord);
+//                        } else {
+//                            // If the current word ends, add it to the list
+//                            if (word.length() > 0) {
+//                                wordsInRange.add(word.toString());
+//                                word.setLength(0); // Clear the word buffer for the next word
+//                            }
+//                        }
+//                    }
+//                }
+//            };
+//
+//            // Set configurations for text extraction (optional)
+//            stripper.setSortByPosition(true); // Process text based on its position
+//
+//            // Extract text from the PDF
+//            stripper.getText(document);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return wordsInRange;
     }
 
     // Helper method to check if a position falls within the specified range
